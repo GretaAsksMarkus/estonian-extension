@@ -3,6 +3,8 @@ from flask_cors import CORS
 from estnltk import Text
 import sys
 
+# i am doing a change hehe
+
 app = Flask(__name__)
 CORS(app)
 

@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "Estonian Comprehension Aid",
+  "version": "1.0",
+  "description": "Morphological highlighter and accessible reading tool for Estonian.",
+  "permissions": [
+    "sidePanel",
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "Open Dashboard"
+  },
+  "side_panel": {
+    "default_path": "sidepanel/panel.html"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "css": ["scripts/injector.css", "scripts/reading_mode.css"],
+      "js": ["scripts/content.js"]
+    }
+  ]
+}

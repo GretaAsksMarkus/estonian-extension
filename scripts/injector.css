@@ -1,0 +1,55 @@
+/* --- Global Spacing --- */
+span {
+    line-height: 1.8;
+}
+
+/* 1. PROPER NOUNS (Names/Places) */
+/* Style: Underlined (#0A6FCD) and Bold */
+.est-proper-noun {
+    border-bottom: 2px solid #0A6FCD;
+    font-weight: 700;
+    color: inherit; /* Keep original text color (usually black) */
+}
+
+/* 2. ABSTRACT/COMMON NOUNS (Things/Concepts) */
+/* Style: Recolored text (#0A6FCD) */
+.est-noun {
+    color: #0A6FCD !important;
+    font-weight: 500;
+}
+
+/* 3. PRONOUNS (He/She/It/This) */
+/* Style: Teal Text (#0F8AA4) */
+.est-pronoun {
+    color: #0F8AA4 !important;
+    font-weight: 500;
+}
+
+/* 4. VERBS (Actions) */
+/* Style: Green Text (#20A40F) */
+.est-verb {
+    color: #20A40F !important;
+    font-weight: 600;
+}
+
+/* 5. ADVERBS (Modifying verbs) */
+/* Style: Highlight Green (Background inspired by #20A40F) */
+.est-adverb {
+    background-color: rgba(32, 164, 15, 0.15); /* 15% opacity of the Verb Green */
+    border-radius: 3px;
+    padding: 0 2px;
+}
+
+/* 6. ADJECTIVES */
+/* Style: "As Is" (No special style, inherits page default) */
+.est-adj {
+    color: #7B287D !important; /* Your Violet color */
+    font-weight: 500;
+    font-style: italic; /* Added Italic */
+}
+
+/* 7. Cases (Subtle background tints - optional) */
+.est-case-gen {
+    /* Keep very subtle or remove if you want cleaner look */
+    background-color: rgba(255, 165, 0, 0.05); 
+}

@@ -1,0 +1,101 @@
+/* The Reading Mode Overlay */
+#est-reader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #ffffff;
+    z-index: 999999; /* On top of everything */
+    display: flex;
+    font-family: 'Lexend', sans-serif; /* You might need to import this font */
+    overflow: hidden;
+    color: #333;
+}
+
+/* Left Navigation Pane */
+#est-reader-nav {
+    width: 250px;
+    background: #f0f4f8;
+    border-right: 1px solid #ddd;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+#est-reader-nav h3 {
+    margin-top: 0;
+    font-size: 18px;
+    color: #05668d;
+}
+
+#est-reader-nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+#est-reader-nav li {
+    margin-bottom: 10px;
+}
+
+#est-reader-nav a {
+    text-decoration: none;
+    color: #555;
+    font-size: 14px;
+}
+
+#est-reader-nav a:hover {
+    color: #05668d;
+    text-decoration: underline;
+}
+
+/* Main Content Area */
+#est-reader-content {
+    flex: 1;
+    padding: 40px 80px;
+    overflow-y: auto;
+    font-size: 16px;
+    line-height: 1.8;
+    max-width: 900px;
+}
+
+/* The "Groups of 3" Sections */
+.est-reader-section {
+    margin-bottom: 40px;
+    padding-left: 15px;
+    border-left: 4px solid #eee; /* Visual marker for groups */
+    position: relative;
+}
+
+.est-section-label {
+    position: absolute;
+    left: -40px;
+    top: 0;
+    font-size: 12px;
+    color: #bbb;
+    font-weight: bold;
+}
+
+/* Sentences on new lines */
+.est-reader-line {
+    display: block;
+    margin-bottom: 12px;
+}
+
+/* Exit Button */
+#est-reader-close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    background: #f44336;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+#est-reader-close:hover {
+    background: #d32f2f;
+}

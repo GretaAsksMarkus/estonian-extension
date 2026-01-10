@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="panel.css">
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="header">
+    <h2>Estonian Aid</h2>
+    <label class="switch master-switch">
+      <input type="checkbox" id="master-toggle" checked>
+      <span class="slider round"></span>
+    </label>
+  </div>
+
+  <div class="card">
+    <button id="analyze-btn" class="primary-btn">Analyze Page</button>
+  </div>
+
+  <div class="card">
+    <h3>Objects & Subjects</h3>
+    
+    <div class="row">
+      <div class="label-box">
+        <span class="dot proper-dot">Aa</span>
+        <div class="text-group">
+          <span class="label">Proper Nouns</span>
+          <span class="desc">Names & Places</span>
+        </div>
+      </div>
+      <label class="switch"><input type="checkbox" id="toggle-proper" checked><span class="slider"></span></label>
+    </div>
+
+    <div class="row">
+      <div class="label-box">
+        <span class="dot noun-dot">●</span>
+        <div class="text-group">
+          <span class="label">Common Nouns</span>
+          <span class="desc">Things & Concepts</span>
+        </div>
+      </div>
+      <label class="switch"><input type="checkbox" id="toggle-nouns" checked><span class="slider"></span></label>
+    </div>
+
+    <div class="row">
+      <div class="label-box">
+        <span class="dot pronoun-dot">●</span>
+        <div class="text-group">
+          <span class="label">Pronouns</span>
+          <span class="desc">He / She / This</span>
+        </div>
+      </div>
+      <label class="switch"><input type="checkbox" id="toggle-pronouns" checked><span class="slider"></span></label>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Action & Description</h3>
+
+    <div class="row">
+      <div class="label-box">
+        <span class="dot verb-dot">●</span>
+        <div class="text-group">
+          <span class="label">Verbs</span>
+          <span class="desc">Actions</span>
+        </div>
+      </div>
+      <label class="switch"><input type="checkbox" id="toggle-verbs" checked><span class="slider"></span></label>
+    </div>
+
+    <div class="row">
+      <div class="label-box">
+        <span class="dot adverb-dot">●</span>
+        <div class="text-group">
+          <span class="label">Adverbs</span>
+          <span class="desc">Modifying verbs</span>
+        </div>
+      </div>
+      <label class="switch"><input type="checkbox" id="toggle-adverbs" checked><span class="slider"></span></label>
+    </div>
+  </div>
+
+  <script src="panel.js"></script>
+</body>
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;500;600&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Lexend', sans-serif; background: #f4f4f9; margin: 0; padding: 12px; color: #333; }
+
+    /* Header */
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 18px;
+      color: #002f5b;
+      font-weight: 700;
+    }
+
+    /* Switch */
+    .switch { position: relative; display: inline-block; width: 40px; height: 22px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; inset: 0; background-color: #ccc; transition: .3s; border-radius: 22px; }
+    .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
+    input:checked + .slider { background-color: #002f5b; }
+    input:checked + .slider:before { transform: translateX(18px); }
+
+    /* Cards */
+    .card { background: white; border-radius: 10px; padding: 12px; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+    h3 { margin: 0 0 10px 0; font-size: 11px; text-transform: uppercase; color: #888; letter-spacing: 0.5px; font-weight: 600; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+
+    /* Rows */
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .row:last-child { margin-bottom: 0; }
+
+    .label-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .label-text {
+      font-size: 13px;
+      font-weight: 500;
+      color: #444;
+    }
+
+    .label-hint-inline {
+      font-size: 11px;
+      color: #aaa;
+      font-weight: 400;
+      margin-left: 4px;
+    }
+
+    /* Status Bar */
+    #status-bar {
+      font-size: 11px; color: #666; text-align: center; margin-top: 10px;
+      padding: 8px; background: #eef; border-radius: 6px; display: none;
+    }
+    .error { background: #fee !important; color: #d00 !important; }
+
+    /* Dot Indicators */
+    .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+    .d-noun { background: #0B5FB3; }
+    .d-verb { background: #21823D; }
+    .d-adj  { background: #6f049a; }
+    .d-adv  { background: #35b470; }
+
+    /* Reset button */
+    .btn-reset {
+      margin-top: 14px;
+      padding: 6px 0;
+      background: none;
+      border: none;
+      color:#666;
+      font-size: 11px;
+      font-weight: 500;
+      text-align: center;
+      letter-spacing: 0.2px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .btn-reset:hover { color: #002f5b; }
+
+    /* Small grouping helper inside cases card */
+    .case-group-title {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #aaa;
+      margin: 10px 0 6px 0;
+    }
+    .case-group-title:first-of-type { margin-top: 0; }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <h2>Estonian Highlighter</h2>
+    <label class="switch">
+      <input type="checkbox" id="chk-master">
+      <span class="slider"></span>
+    </label>
+  </div>
+
+  <div id="status-bar">Ready</div>
+
+  <!-- POS: Action -->
+  <div class="card" id="card-action">
+    <h3>Action</h3>
+
+    <div class="row">
+      <div class="label-group">
+        <span class="dot d-verb"></span>
+        <span class="label-text">Verbs</span>
+        <span class="label-hint-inline">ACTION</span>
+      </div>
+      <label class="switch"><input type="checkbox" id="chk-verb" checked><span class="slider"></span></label>
+    </div>
+
+    <div class="row">
+      <div class="label-group">
+        <span class="dot d-adv"></span>
+        <span class="label-text">Adverbs</span>
+        <span class="label-hint-inline">how? when? where?</span>
+      </div>
+      <label class="switch"><input type="checkbox" id="chk-adv" checked><span class="slider"></span></label>
+    </div>
+  </div>
+
+  <!-- POS: Main Character -->
+  <div class="card" id="card-main">
+    <h3>Main Character</h3>
+
+    <div class="row">
+      <div class="label-group">
+        <span class="dot d-noun"></span>
+        <span class="label-text">Nouns</span>
+        <span class="label-hint-inline">main characters</span>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="chk-noun" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="row">
+      <div class="label-group">
+        <span class="dot d-adj"></span>
+        <span class="label-text">Adjectives</span>
+        <span class="label-hint-inline">extra flavour</span>
+      </div>
+      <label class="switch"><input type="checkbox" id="chk-adj" checked><span class="slider"></span></label>
+    </div>
+  </div>
+
+  <!-- POS: Extra -->
+  <div class="card" id="card-pos-extra">
+    <h3>Extra POS</h3>
+
+    <div class="row">
+      <div class="label-group">
+        <span class="label-text">Pronouns</span>
+        <span class="label-hint-inline">ghosts of nouns</span>
+      </div>
+      <label class="switch"><input type="checkbox" id="chk-pron"><span class="slider"></span></label>
+    </div>
+
+    <div class="row">
+      <div class="label-group">
+        <span class="label-text">Adpositions</span>
+        <span class="label-hint-inline">spatial vibes</span>
+      </div>
+      <label class="switch"><input type="checkbox" id="chk-adp"><span class="slider"></span></label>
+    </div>
+
+    <div class="row">
+      <div class="label-group">
+        <span class="label-text">Conjunctions</span>
+        <span class="label-hint-inline">connect</span>
+      </div>
+      <label class="switch"><input type="checkbox" id="chk-conj"><span class="slider"></span></label>
+    </div>
+
+    <!-- If you later enable numerals in sidebar.js + content.js -->
+    <!--
+    <div class="row">
+      <div class="label-group">
+        <span class="label-text">Numerals</span>
+        <span class="label-hint-inline">count</span>
+      </div>
+      <label class="switch"><input type="checkbox" id="chk-num"><span class="slider"></span></label>
+    </div>
+    -->
+  </div>
+
+  <!-- CASES (14) -->
+  <div class="card" id="card-cases">
+    <h3>Cases (14)</h3>
+
+    <div class="case-group-title">Core</div>
+    <div class="row"><div class="label-group"><span class="label-text">Nominative</span></div>
+      <label class="switch"><input type="checkbox" id="chk-nom" checked><span class="slider"></span></label>
+    </div>
+    <div class="row"><div class="label-group"><span class="label-text">Genitive</span></div>
+      <label class="switch"><input type="checkbox" id="chk-gen"><span class="slider"></span></label>
+    </div>
+    <div class="row"><div class="label-group"><span class="label-text">Partitive</span></div>
+      <label class="switch"><input type="checkbox" id="chk-par"><span class="slider"></span></label>
+    </div>
+
+    <div class="case-group-title">Inside / out</div>
+    <div class="row"><div class="label-group"><span class="label-text">Illative</span></div>
+      <label class="switch"><input type="checkbox" id="chk-ill"><span class="slider"></span></label>
+    </div>
+    <div class="row"><div class="label-group"><span class="label-text">Inessive</span></div>
+      <label class="switch"><input type="checkbox" id="chk-ine"><span class="slider"></span></label>
+    </div>
+    <div class="row"><div class="label-group"><span class="label-text">Elative</span></div>
+      <label class="switch"><input type="checkbox" id="chk-ela"><span class="slider"></span></label>
+    </div>
+
+    <div class="case-group-title">To / on / from (surface)</div>
+    <div class="row"><div class="label-group"><span class="label-text">Allative</span></div>
+      <label class="switch"><input type="checkbox" id="chk-all"><span class="slider"></span></label>
+    </div>
+    <div class="row"><div class="label-group"><span class="label-text">Adessive</span></div>
+      <label class="switch"><input type="checkbox" id="chk-ade"><span class="slider"></span></label>
+    </div>
+    <div class="row"><div class="label-group"><span class="label-text">Ablative</span></div>
+      <label class="switch"><input type="checkbox" id="chk-abl"><span class="slider"></span></label>
+    </div>
+
+    <div class="case-group-title">Meaning</div>
+    <div class="row"><div class="label-group"><span class="label-text">Translative</span></div>
+      <label class="switch"><input type="checkbox" id="chk-tra"><span class="slider"></span></label>
+    </div>
+    <div class="row"><div class="label-group"><span class="label-text">Terminative</span></div>
+      <label class="switch"><input type="checkbox" id="chk-ter"><span class="slider"></span></label>
+    </div>
+    <div class="row"><div class="label-group"><span class="label-text">Essive</span></div>
+      <label class="switch"><input type="checkbox" id="chk-ess"><span class="slider"></span></label>
+    </div>
+
+    <div class="case-group-title">Extra</div>
+    <div class="row"><div class="label-group"><span class="label-text">Abessive</span></div>
+      <label class="switch"><input type="checkbox" id="chk-abe"><span class="slider"></span></label>
+    </div>
+    <div class="row"><div class="label-group"><span class="label-text">Comitative</span></div>
+      <label class="switch"><input type="checkbox" id="chk-kom"><span class="slider"></span></label>
+    </div>
+  </div>
+
+  <!-- Optional: Forms -->
+  <!--
+  <div class="card" id="card-forms">
+    <h3>Forms</h3>
+
+    <div class="row">
+      <div class="label-group"><span class="label-text">Number (SG / PL)</span></div>
+      <label class="switch"><input type="checkbox" id="chk-number"><span class="slider"></span></label>
+    </div>
+
+    <div class="row">
+      <div class="label-group"><span class="label-text">Verb: -ma</span></div>
+      <label class="switch"><input type="checkbox" id="chk-v-ma"><span class="slider"></span></label>
+    </div>
+
+    <div class="row">
+      <div class="label-group"><span class="label-text">Verb: -da</span></div>
+      <label class="switch"><input type="checkbox" id="chk-v-da"><span class="slider"></span></label>
+    </div>
+
+    <div class="row">
+      <div class="label-group"><span class="label-text">Participle</span></div>
+      <label class="switch"><input type="checkbox" id="chk-v-part"><span class="slider"></span></label>
+    </div>
+  </div>
+  -->
+
+  <button id="btn-reset" class="btn-reset">Reset to calm defaults</button>
+
+  <script src="sidebar.js"></script>
+</body>
+</html>

@@ -1,0 +1,307 @@
+/* =========================================================
+   Estonian Highlighter — Mode 1 (Stable Highlight Layer)
+   Scope: nouns, verbs, adjectives, adverbs, negation, + 14 cases
+   No reading mode.
+   ========================================================= */
+
+
+/* Base wrapper for every highlighted token */
+.esthl {
+  display: inline;
+  padding: 0.40em 0.02em;
+
+  /* Make background pills behave on line wraps */
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+
+
+/* -------------------------
+   POS base styles / COLORS
+   ------------------------- */
+
+/* Nouns (anchors) */
+.esthl.est-noun-base {
+  padding: 0.1em 0.35em;
+  background-color: rgba(100,150,255,0.12);
+  border-bottom: 3px solid rgba(100,150,255,0.6);
+  border-radius: 1px 1px 0 0;
+}
+
+
+padding: 0.1em 0.35em;
+  background-color: rgba(100,150,255,0.12);
+  border-bottom: 2px solid rgba(100,150,255,0.6);
+  border-radius: 2px 2px 0 0;
+
+/* Verbs (engine) */
+.esthl.est-verb-base {
+  font-weight: 600;
+
+  background: linear-gradient(
+    transparent 18%,
+    #D4EDDA 22%,
+    #D4EDDA 82%,
+    transparent 88%
+  );
+}
+
+/* Adjectives */
+.esthl.est-adj-base {
+  color: darkmagenta;
+  font-style: italic;
+  background: linear-gradient(
+    transparent 18%,
+    #e7d0fe 22%,
+    #e7d0fe 82%,
+    transparent 88%
+  );
+}
+
+/* Adverbs — stable marker */
+.esthl.est-adv-base {
+  font-style: italic;
+  color: rgb(0, 63, 0);
+  background: linear-gradient(
+    transparent 18%,
+    #D4EDDA 22%,
+    #D4EDDA 82%,
+    transparent 88%
+  );
+}
+
+/* -------------------------
+   Extra POS styles
+   ------------------------- */
+
+/* Pronouns (P) — same style as nouns */
+.esthl.est-pron-base {
+  color: #0b1e6f;
+  border: 0.3em;
+  border-color: #0b1e6f;
+  background: linear-gradient(
+    transparent 18%,
+    #D1E3FF 22%,
+    #D1E3FF 82%,
+    transparent 88%
+  );
+}
+
+/* Adpositions / Kaassõnad (K) */
+.esthl.est-adp-base {
+  border-width: 0.2em;
+  border-style: dotted;
+  border-color: aquamarine;
+}
+
+/* Conjunctions (J) — FIXED gradient syntax (no trailing comma) */
+.esthl.est-conj-base {
+  background: linear-gradient(
+    transparent 18%,
+    #43474c 22%,
+    #43474c 82%,
+    transparent 88%
+  );
+}
+
+/* Numerals (N) */
+.esthl.est-num-base {
+  color: rgb(8, 60, 34);
+}
+
+
+
+/* -------------------------
+   Negation
+   ------------------------- */
+.esthl.est-negation {
+  opacity: 0.9;
+  border-bottom: 0.18em solid #d13b3b;
+  padding-bottom: 0.05em;
+}
+
+
+
+/* -------------------------
+   Number markers (SG / PL)
+   ------------------------- */
+.esthl.est-num-sg::after {
+  content: "·SG";
+  font-size: 0.75em;
+  opacity: 0.7;
+  margin-left: 0.15em;
+}
+
+.esthl.est-num-pl::after {
+  content: "·PL";
+  font-size: 0.75em;
+  opacity: 0.7;
+  margin-left: 0.15em;
+}
+
+
+
+/* -------------------------
+   Verb form markers (-MA / -DA / PART)
+   ------------------------- */
+.esthl.est-v-ma::after {
+  content: "·MA";
+  font-size: 0.75em;
+  opacity: 0.7;
+  margin-left: 0.15em;
+}
+
+.esthl.est-v-da::after {
+  content: "·DA";
+  font-size: 0.75em;
+  opacity: 0.7;
+  margin-left: 0.15em;
+}
+
+.esthl.est-v-part::after {
+  content: "·PART";
+  font-size: 0.75em;
+  opacity: 0.7;
+  margin-left: 0.15em;
+}
+
+
+
+/* =========================================================
+   CASES (14)
+   - These are additive: they layer on top of POS styling.
+   - You can re-style later into a full “case palette”.
+   ========================================================= */
+
+/* Core
+.esthl.est-case-nom {
+  /* optional: keep subtle */
+  /* no extra styling by default */
+
+
+.esthl.est-case-gen {
+  border-bottom: 0.18em solid #e68a22;
+  padding-bottom: 0.05em;
+}
+
+.esthl.est-case-par {
+  border-bottom: 0.18em dashed #0b1e6f;
+  padding-bottom: 0.05em;
+}
+
+/* Internal local: into / in / out */
+.esthl.est-case-ill {
+  border-bottom: 0.18em solid #7a5cff;
+  padding-bottom: 0.05em;
+}
+
+.esthl.est-case-ine {
+  border-bottom: 0.18em dotted #7a5cff;
+  padding-bottom: 0.05em;
+}
+
+.esthl.est-case-ela {
+  border-bottom: 0.18em dashed #7a5cff;
+  padding-bottom: 0.05em;
+}
+
+/* External local: to / on / from */
+.esthl.est-case-all {
+  border-bottom: 0.18em solid #2aa198;
+  padding-bottom: 0.05em;
+}
+
+.esthl.est-case-ade {
+  border-bottom: 0.18em dotted #2aa198;
+  padding-bottom: 0.05em;
+}
+
+.esthl.est-case-abl {
+  border-bottom: 0.18em dashed #2aa198;
+  padding-bottom: 0.05em;
+}
+
+/* Semantic: become / until / as */
+.esthl.est-case-tra {
+  box-shadow: inset 0 -0.25em 0 rgba(255, 209, 102, 0.8);
+}
+
+.esthl.est-case-ter {
+  box-shadow: inset 0 -0.25em 0 rgba(248, 150, 30, 0.75);
+}
+
+.esthl.est-case-ess {
+  box-shadow: inset 0 -0.25em 0 rgba(144, 219, 244, 0.8);
+}
+
+/* Marginal */
+.esthl.est-case-abe {
+  opacity: 0.78;
+  border-bottom: 0.18em solid rgba(0, 0, 0, 0.25);
+  padding-bottom: 0.05em;
+}
+
+.esthl.est-case-kom {
+  outline: 1px solid rgba(0,0,0,0.28);
+  outline-offset: 0.08em;
+  border-radius: 0.15em;
+}
+
+
+
+/* Optional: if you use a separate suffix span later */
+.esthl.est-case-suffix {
+  font-weight: 900 !important;
+  color: #000 !important;
+}
+
+
+
+/* =========================================================
+   Dashboard UI (if used) — isolate and avoid collisions
+   ========================================================= */
+
+#est-dashboard {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 220px;
+
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 15px;
+
+  z-index: 2147483647;
+  font-family: sans-serif;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* Prefix switch classes so site CSS can’t collide */
+.est-switch { position: relative; display: inline-block; width: 34px; height: 18px; }
+.est-switch input { opacity: 0; width: 0; height: 0; }
+.est-slider {
+  position: absolute; cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #ccc;
+  transition: .2s;
+  border-radius: 20px;
+}
+
+.est-switch input:checked + .est-slider { background-color: #002f5b; }
+.est-slider:before {
+  position: absolute;
+  content: "";
+  height: 12px; width: 12px;
+  left: 3px; bottom: 3px;
+  background-color: white;
+  transition: .2s;
+  border-radius: 50%;
+}
+.est-switch input:checked + .est-slider:before { transform: translateX(16px); }
+
+
+/* 12.01 - SENTENCES & CHUNKING  */
+.est-sentence-gap { display:block; height: 2em; }
+.est-sentence-gap.wide { height: 4em; }

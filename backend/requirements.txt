@@ -1,3 +1,0 @@
-flask
-flask-cors
-estnltk==1.7.3

@@ -1,0 +1,36 @@
+{
+  "manifest_version": 2,
+  "name": "Estonian Engine (Firefox Edition)",
+  "version": "4.0",
+  "description": "Native sidebar grammar analysis for Estonian.",
+
+  "permissions": [
+    "activeTab",
+    "storage",
+    "tabs",
+    "http://127.0.0.1:8000/*"
+  ],
+
+  "background": {
+    "scripts": ["background.js"]
+  },
+
+  "sidebar_action": {
+    "default_panel": "sidebar.html",
+    "default_title": "Estonian Engine"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "css": ["styles.css"],
+      "js": ["content.js"]
+    }
+  ],
+
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "estonian-engine@yourname.com"
+    }
+  }
+}

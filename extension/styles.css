@@ -1,14 +1,15 @@
+
 /* =========================================================
    Estonian Highlighter — Mode 1 (Stable Highlight Layer)
    Scope: nouns, verbs, adjectives, adverbs, negation, + 14 cases
-   No reading mode.
    ========================================================= */
 
 
 /* Base wrapper for every highlighted token */
+/* Base wrapper for every token span (even unstyled ones) */
 .esthl {
   display: inline;
-  padding: 0.40em 0.02em;
+  padding: 0;
 
   /* Make background pills behave on line wraps */
   -webkit-box-decoration-break: clone;
@@ -27,25 +28,15 @@
   background-color: rgba(100,150,255,0.12);
   border-bottom: 3px solid rgba(100,150,255,0.6);
   border-radius: 1px 1px 0 0;
-}
+} 
 
-
-padding: 0.1em 0.35em;
-  background-color: rgba(100,150,255,0.12);
-  border-bottom: 2px solid rgba(100,150,255,0.6);
-  border-radius: 2px 2px 0 0;
-
-/* Verbs (engine) */
+/* Verbs */
 .esthl.est-verb-base {
-  font-weight: 600;
-
-  background: linear-gradient(
-    transparent 18%,
-    #D4EDDA 22%,
-    #D4EDDA 82%,
-    transparent 88%
-  );
-}
+  padding: 0.1em 0.35em;
+  background-color: rgba(131, 255, 100, 0.12);
+  border-bottom: 3px solid rgba(100, 255, 136, 0.6);
+  border-radius: 1px 1px 0 0;
+} 
 
 /* Adjectives */
 .esthl.est-adj-base {
@@ -174,23 +165,24 @@ padding: 0.1em 0.35em;
    - You can re-style later into a full “case palette”.
    ========================================================= */
 
-/* Core
+/* 1 Nimetav (nominatiiv) */
 .esthl.est-case-nom {
-  /* optional: keep subtle */
-  /* no extra styling by default */
+  /* optional: no extra styling by default */
+}
 
-
+/* 2 Omastav (genitiiv) */
 .esthl.est-case-gen {
   border-bottom: 0.18em solid #e68a22;
   padding-bottom: 0.05em;
 }
 
+/* 3 Osastav */
 .esthl.est-case-par {
   border-bottom: 0.18em dashed #0b1e6f;
   padding-bottom: 0.05em;
 }
 
-/* Internal local: into / in / out */
+/* 4 Internal local: into / in / out */
 .esthl.est-case-ill {
   border-bottom: 0.18em solid #7a5cff;
   padding-bottom: 0.05em;
@@ -302,6 +294,35 @@ padding: 0.1em 0.35em;
 .est-switch input:checked + .est-slider:before { transform: translateX(16px); }
 
 
-/* 12.01 - SENTENCES & CHUNKING  */
-.est-sentence-gap { display:block; height: 2em; }
-.est-sentence-gap.wide { height: 4em; }
+/* =========================================================
+   Reading Mode (toggle via content script)
+   ========================================================= */
+
+/* Reading Mode: sentence chunk gaps */
+html.est-reading-mode .est-sentence-gap,
+body.est-reading-mode .est-sentence-gap { 
+  display:block; 
+  height: 2em; }
+html.est-reading-mode .est-sentence-gap.wide,
+body.est-reading-mode .est-sentence-gap.wide { display:block; height: 4em; }
+
+
+/* 12.01 - SENTENCES & CHUNKING (controlled by Reading Mode) */
+.est-sentence-gap { display:none; height: 2em; }
+.est-sentence-gap.wide { display:none; height: 4em; }
+
+
+html.est-reading-mode, body.est-reading-mode {
+  line-height: 1.8 !important;
+  letter-spacing: 0.02em !important;
+}
+
+body.est-reading-mode p,
+body.est-reading-mode li {
+  max-width: 72ch !important;
+}
+
+/* Optional: soften non-highlighted text a bit */
+body.est-reading-mode {
+  -webkit-font-smoothing: antialiased;
+}

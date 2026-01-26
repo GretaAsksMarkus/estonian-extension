@@ -136,6 +136,14 @@ browser.runtime.onMessage.addListener((message) => {
     refreshHighlightClasses();
     return;
   }
+
+  if (message.action === "TOGGLE_READING_MODE") {
+    const on = !!message.on;
+    document.documentElement.classList.toggle("est-reading-mode", on);
+    document.body?.classList.toggle("est-reading-mode", on);
+    sendStatus(on ? "Reading mode: ON" : "Reading mode: OFF");
+    return;
+  }
 });
 
 function sendStatus(text, error = false) {
@@ -278,11 +286,22 @@ function wrapTextNode(textNode, tokens, sentences) {
   const text = textNode.nodeValue;
   if (!text) return;
 
-  // sentence end offsets
-  const sentenceEnds = (sentences || [])
+    // sentence end offsets (server-provided preferred; fallback to regex if missing)
+  let sentenceEnds = (sentences || [])
     .map(s => Number(s.end))
     .filter(n => Number.isFinite(n) && n >= 0 && n <= text.length)
     .sort((a, b) => a - b);
+
+  // Fallback: detect sentence ends inside this text node
+  if (!sentenceEnds.length) {
+    const reEnd = /[.!?]+(?=\\s|$)/g;
+    const ends = [];
+    let m;
+    while ((m = reEnd.exec(text)) !== null) {
+      ends.push(m.index + m[0].length);
+    }
+    sentenceEnds = ends;
+  }
 
   let sentenceCount = 0;
   let endIdx = 0;
@@ -314,14 +333,13 @@ function wrapTextNode(textNode, tokens, sentences) {
     if (local < end) frag.appendChild(document.createTextNode(text.slice(local, end)));
   }
 
-  // Filter to tokens we highlight under SETTINGS
+  // Normalize all tokens (wrap everything so toggles can reveal new categories without re-running)
   const highlightTokens = (tokens || [])
     .map(t => ({
       ...t,
       _posN: normalizePos(t),
       _caseN: normalizeCase(t),
     }))
-    .filter(t => shouldHighlightToken(t))
     .sort((a, b) => a.start - b.start);
 
   // Validate offsets

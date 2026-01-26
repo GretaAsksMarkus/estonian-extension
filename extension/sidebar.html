@@ -68,6 +68,22 @@
     }
     .error { background: #fee !important; color: #d00 !important; }
 
+
+/* Legend styles (match page highlight cues, simplified) */
+.legend-verb { font-weight: 700; background: linear-gradient(transparent 18%, #D4EDDA 22%, #D4EDDA 82%, transparent 88%); padding: 0 4px; border-radius: 4px; }
+.legend-adv  { font-style: italic; background: linear-gradient(transparent 18%, #D4EDDA 22%, #D4EDDA 82%, transparent 88%); padding: 0 4px; border-radius: 4px; }
+.legend-noun { padding: 0 4px; border-bottom: 3px solid rgba(100,150,255,0.6); background: rgba(100,150,255,0.12); border-radius: 2px 2px 0 0; }
+.legend-adj  { font-style: italic; color: darkmagenta; background: linear-gradient(transparent 18%, #e7d0fe 22%, #e7d0fe 82%, transparent 88%); padding: 0 4px; border-radius: 4px; }
+
+.legend-case-gen { border-bottom: 2px solid #e68a22; padding-bottom: 1px; }
+.legend-case-par { border-bottom: 2px dashed #0b1e6f; padding-bottom: 1px; }
+.legend-case-ill { border-bottom: 2px solid #7a5cff; padding-bottom: 1px; }
+.legend-case-ine { border-bottom: 2px dotted #7a5cff; padding-bottom: 1px; }
+.legend-case-ela { border-bottom: 2px dashed #7a5cff; padding-bottom: 1px; }
+.legend-case-all { border-bottom: 2px solid #2aa198; padding-bottom: 1px; }
+.legend-case-ade { border-bottom: 2px dotted #2aa198; padding-bottom: 1px; }
+.legend-case-abl { border-bottom: 2px dashed #2aa198; padding-bottom: 1px; }
+
     /* Dot Indicators */
     .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
     .d-noun { background: #0B5FB3; }
@@ -98,7 +114,7 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
       color: #aaa;
-      margin: 10px 0 6px 0;
+      margin: 20px 20px 6px 0;
     }
     .case-group-title:first-of-type { margin-top: 0; }
   </style>
@@ -115,38 +131,27 @@
 
   <div id="status-bar">Ready</div>
 
-  <!-- POS: Action -->
-  <div class="card" id="card-action">
-    <h3>Action</h3>
 
-    <div class="row">
-      <div class="label-group">
-        <span class="dot d-verb"></span>
-        <span class="label-text">Verbs</span>
-        <span class="label-hint-inline">ACTION</span>
-      </div>
-      <label class="switch"><input type="checkbox" id="chk-verb" checked><span class="slider"></span></label>
-    </div>
+<!-- Reading Mode -->
+<div class="card" id="card-reading">
+  <h3>Reading</h3>
 
-    <div class="row">
-      <div class="label-group">
-        <span class="dot d-adv"></span>
-        <span class="label-text">Adverbs</span>
-        <span class="label-hint-inline">how? when? where?</span>
-      </div>
-      <label class="switch"><input type="checkbox" id="chk-adv" checked><span class="slider"></span></label>
+  <div class="row">
+    <div class="label-group">
+      <span class="label-text">Reading Mode</span>
     </div>
+    <label class="switch"><input type="checkbox" id="chk-reading"><span class="slider"></span></label>
   </div>
+</div>
 
-  <!-- POS: Main Character -->
-  <div class="card" id="card-main">
-    <h3>Main Character</h3>
+  <!-- Key -->
+  <div class="card" id="card-action">
 
-    <div class="row">
+      <div class="row">
       <div class="label-group">
         <span class="dot d-noun"></span>
-        <span class="label-text">Nouns</span>
-        <span class="label-hint-inline">main characters</span>
+        <span class="label-text legend-noun">Nouns</span>
+    
       </div>
       <label class="switch">
         <input type="checkbox" id="chk-noun" checked>
@@ -156,8 +161,25 @@
 
     <div class="row">
       <div class="label-group">
+        <span class="dot d-verb"></span>
+        <span class="label-text legend-verb">Verbs</span>
+      </div>
+      <label class="switch"><input type="checkbox" id="chk-verb" checked><span class="slider"></span></label>
+    </div>
+
+    <div class="row">
+      <div class="label-group">
+        <span class="dot d-adv"></span>
+        <span class="label-text legend-adv">Adverbs</span>
+      </div>
+      <label class="switch"><input type="checkbox" id="chk-adv" checked><span class="slider"></span></label>
+    </div>
+  </div>
+
+    <div class="row">
+      <div class="label-group">
         <span class="dot d-adj"></span>
-        <span class="label-text">Adjectives</span>
+        <span class="label-text legend-adj">Adjectives</span>
         <span class="label-hint-inline">extra flavour</span>
       </div>
       <label class="switch"><input type="checkbox" id="chk-adj" checked><span class="slider"></span></label>
@@ -165,6 +187,7 @@
   </div>
 
   <!-- POS: Extra -->
+   <!--
   <div class="card" id="card-pos-extra">
     <h3>Extra POS</h3>
 
@@ -191,7 +214,7 @@
       </div>
       <label class="switch"><input type="checkbox" id="chk-conj"><span class="slider"></span></label>
     </div>
-
+-->
     <!-- If you later enable numerals in sidebar.js + content.js -->
     <!--
     <div class="row">
@@ -204,59 +227,58 @@
     -->
   </div>
 
-  <!-- CASES (14) -->
+  <!-- CASES -->
   <div class="card" id="card-cases">
-    <h3>Cases (14)</h3>
-
-    <div class="case-group-title">Core</div>
-    <div class="row"><div class="label-group"><span class="label-text">Nominative</span></div>
+    <h3>Cases </h3>
+    
+    <div class="row"><div class="label-group"><span class="label-text">(1) Nime・tav </span></div>
       <label class="switch"><input type="checkbox" id="chk-nom" checked><span class="slider"></span></label>
     </div>
-    <div class="row"><div class="label-group"><span class="label-text">Genitive</span></div>
+    <div class="row"><div class="label-group"><span class="label-text legend-case-gen">(2) Omas・tav</span></div>
       <label class="switch"><input type="checkbox" id="chk-gen"><span class="slider"></span></label>
     </div>
-    <div class="row"><div class="label-group"><span class="label-text">Partitive</span></div>
+    <div class="row"><div class="label-group"><span class="label-text legend-case-par">(3) Osas・tav</span></div>
       <label class="switch"><input type="checkbox" id="chk-par"><span class="slider"></span></label>
     </div>
 
-    <div class="case-group-title">Inside / out</div>
-    <div class="row"><div class="label-group"><span class="label-text">Illative</span></div>
+    <div class="case-group-title">III Kuhu? Kus? Kust? ></Ruum-Sees></div>
+    <div class="row"><div class="label-group"><span class="label-text legend-case-ill">(4) Sisse・ütlev</span></div>
       <label class="switch"><input type="checkbox" id="chk-ill"><span class="slider"></span></label>
     </div>
-    <div class="row"><div class="label-group"><span class="label-text">Inessive</span></div>
+    <div class="row"><div class="label-group"><span class="label-text legend-case-ine">(5) Sees・ütlev</span></div>
       <label class="switch"><input type="checkbox" id="chk-ine"><span class="slider"></span></label>
     </div>
-    <div class="row"><div class="label-group"><span class="label-text">Elative</span></div>
+    <div class="row"><div class="label-group"><span class="label-text legend-case-ela"> (6)Seest・ütlev</span></div>
       <label class="switch"><input type="checkbox" id="chk-ela"><span class="slider"></span></label>
     </div>
 
     <div class="case-group-title">To / on / from (surface)</div>
-    <div class="row"><div class="label-group"><span class="label-text">Allative</span></div>
+    <div class="row"><div class="label-group"><span class="label-text legend-case-all"> (7) Alale・ütlev</span></div>
       <label class="switch"><input type="checkbox" id="chk-all"><span class="slider"></span></label>
     </div>
-    <div class="row"><div class="label-group"><span class="label-text">Adessive</span></div>
+    <div class="row"><div class="label-group"><span class="label-text legend-case-ade">(8) Alal・ütlev </span></div>
       <label class="switch"><input type="checkbox" id="chk-ade"><span class="slider"></span></label>
     </div>
-    <div class="row"><div class="label-group"><span class="label-text">Ablative</span></div>
+    <div class="row"><div class="label-group"><span class="label-text legend-case-abl">(9) Alalt・ütlev </span></div>
       <label class="switch"><input type="checkbox" id="chk-abl"><span class="slider"></span></label>
     </div>
 
     <div class="case-group-title">Meaning</div>
-    <div class="row"><div class="label-group"><span class="label-text">Translative</span></div>
+    <div class="row"><div class="label-group"><span class="label-text">(10) Saav</span></div>
       <label class="switch"><input type="checkbox" id="chk-tra"><span class="slider"></span></label>
     </div>
-    <div class="row"><div class="label-group"><span class="label-text">Terminative</span></div>
+    <div class="row"><div class="label-group"><span class="label-text">(11) Rajav </span></div>
       <label class="switch"><input type="checkbox" id="chk-ter"><span class="slider"></span></label>
     </div>
-    <div class="row"><div class="label-group"><span class="label-text">Essive</span></div>
+    <div class="row"><div class="label-group"><span class="label-text">(12) Olev </span></div>
       <label class="switch"><input type="checkbox" id="chk-ess"><span class="slider"></span></label>
     </div>
 
     <div class="case-group-title">Extra</div>
-    <div class="row"><div class="label-group"><span class="label-text">Abessive</span></div>
+    <div class="row"><div class="label-group"><span class="label-text">(13) Ilma・ütlev</span></div>
       <label class="switch"><input type="checkbox" id="chk-abe"><span class="slider"></span></label>
     </div>
-    <div class="row"><div class="label-group"><span class="label-text">Comitative</span></div>
+    <div class="row"><div class="label-group"><span class="label-text">(14) Kaasa・ütlev </span></div>
       <label class="switch"><input type="checkbox" id="chk-kom"><span class="slider"></span></label>
     </div>
   </div>

@@ -5,6 +5,7 @@ const statusEl = document.getElementById("status-bar");
 
 const UI = {
   master: "chk-master",
+  reading: "chk-reading",
 
   // POS
   noun: "chk-noun",
@@ -43,6 +44,7 @@ const UI = {
 
 // Calm defaults
 const DEFAULT_SETTINGS = {
+  reading: false,
   noun: true,
   verb: true,
   adj: true,
@@ -118,6 +120,7 @@ async function sendToActiveTab(payload) {
 
 function applySettingsToUI() {
   setCheckbox(UI.master, isMasterOn);
+  if (UI.reading) setCheckbox(UI.reading, settings.reading);
 
   for (const k of ["noun","verb","adj","adv","pron","adp","conj","num"]) {
     if (UI[k]) setCheckbox(UI[k], settings[k]);
@@ -133,6 +136,9 @@ function applySettingsToUI() {
 }
 
 function readUIIntoSettings() {
+  const r = getCheckbox(UI.reading);
+  if (r !== null) settings.reading = r;
+
   for (const k of ["noun","verb","adj","adv","pron","adp","conj","num"]) {
     const v = getCheckbox(UI[k]);
     if (v !== null) settings[k] = v;
@@ -194,6 +200,10 @@ async function onMasterChanged(checked) {
 
   if (isMasterOn) {
     updateStatus("ON — scanning…");
+
+    // ensure reading mode state matches sidebar
+    await sendToActiveTab({ action: "TOGGLE_READING_MODE", on: settings.reading });
+
     await sendToActiveTab({
       action: "ANALYZE_PAGE",
       settings: buildContentSettingsPayload(),
@@ -201,11 +211,15 @@ async function onMasterChanged(checked) {
   } else {
     updateStatus("OFF — highlights removed.");
     await sendToActiveTab({ action: "STOP_ANALYSIS" });
+    // keep reading mode as-is (user choice)
   }
 }
 
 async function onAnySettingChanged() {
   readUIIntoSettings();
+
+  // Reading mode applies immediately, even if analysis is OFF
+  await sendToActiveTab({ action: "TOGGLE_READING_MODE", on: settings.reading });
 
   if (!isMasterOn) {
     updateStatus("OFF — settings saved.");
@@ -252,6 +266,7 @@ function bindCheckbox(id) {
   }
 
   // bind all toggles
+  bindCheckbox(UI.reading);
   for (const k of ["noun","verb","adj","adv","pron","adp","conj","num"]) bindCheckbox(UI[k]);
   for (const c of ["nom","gen","par","ill","ine","ela","all","ade","abl","tra","ter","ess","abe","kom"]) bindCheckbox(UI[c]);
   for (const k of ["number","v_ma","v_da","v_part"]) bindCheckbox(UI[k]);

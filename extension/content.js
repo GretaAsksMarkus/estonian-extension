@@ -108,7 +108,66 @@ let SETTINGS = {
   v_ma: false,
   v_da: false,
   v_part: false,
+
+  // Reading Mode fine-tuning (driven by sidebar)
+  rm_line: "medium",     // small | medium | large
+  rm_letter: "medium",   // tight | medium | wide
+  rm_chunk: "medium",    // off | small | medium | large (we use 3 options in UI)
+  rm_width: "medium",    // wide | medium | narrow
 };
+
+// -------------------------
+// Reading Mode helpers
+// -------------------------
+function applyReadingModeSettings() {
+  const root = document.documentElement;
+  const body = document.body;
+
+  // Line-height
+  const lineMap = { small: 1.75, medium: 2.2, large: 2.6 };
+  const letterMap = { small: 0, medium: 0.02, large: 0.04 }; // em
+  const widthMap = { wide: 90, medium: 72, narrow: 60 }; // ch
+
+  const chunkKey = (SETTINGS.rm_chunk || "medium").toLowerCase();
+  const lineKey = (SETTINGS.rm_line || "medium").toLowerCase();
+  const letterKey = (SETTINGS.rm_letter || "medium").toLowerCase();
+  const widthKey = (SETTINGS.rm_width || "medium").toLowerCase();
+
+  // chunking: either off or controlled heights
+  root.dataset.estChunking = chunkKey === "off" ? "off" : "on";
+  if (body) body.dataset.estChunking = root.dataset.estChunking;
+
+  // Set CSS variables (defined in styles.css :root)
+  root.style.setProperty("--est-rm-line-height", String(lineMap[lineKey] ?? 2.2));
+  root.style.setProperty("--est-rm-letter-spacing", `${letterMap[letterKey] ?? 0.02}em`);
+  root.style.setProperty("--est-rm-max-width", `${widthMap[widthKey] ?? 72}ch`);
+
+  // Gap presets: 3 UI options (small / medium / large) + off
+  const gapPresets = {
+    small: { gap: "1.1em", wide: "2.2em" },
+    medium: { gap: "2em", wide: "4em" },
+    large: { gap: "3em", wide: "6em" },
+  };
+  if (chunkKey !== "off") {
+    const p = gapPresets[chunkKey] || gapPresets.medium;
+    root.style.setProperty("--est-rm-gap", p.gap);
+    root.style.setProperty("--est-rm-gap-wide", p.wide);
+  }
+}
+
+// -------------------------
+// Case number helpers
+// -------------------------
+const CASE_ORDER = [
+  "nom","gen","par","ill","ine","ela","all","ade","abl","tra","ter","ess","abe","kom"
+];
+
+function syncCaseNumberClasses() {
+  const root = document.documentElement;
+  for (const c of CASE_ORDER) {
+    root.classList.toggle(`est-case-num-${c}`, !!SETTINGS[c]);
+  }
+}
 
 // -------------------------
 // Messaging from Sidebar
@@ -119,6 +178,7 @@ browser.runtime.onMessage.addListener((message) => {
   if (message.action === "ANALYZE_PAGE") {
     IS_ACTIVE = true;
     SETTINGS = { ...SETTINGS, ...(message.settings || {}) };
+    syncGlobalModeClasses();
     startHighlight();
     return;
   }
@@ -127,12 +187,20 @@ browser.runtime.onMessage.addListener((message) => {
     IS_ACTIVE = false;
     IS_RUNNING = false;
     removeHighlights();
+    // Remove global UI classes so the page returns to normal.
+    const html = document.documentElement;
+    for (const c of [
+      "nom","gen","par","ill","ine","ela","all","ade","abl","tra","ter","ess","abe","kom"
+    ]) {
+      html.classList.remove(`est-case-num-${c}`);
+    }
     sendStatus("OFF — highlights removed.");
     return;
   }
 
   if (message.action === "UPDATE_VISUALS") {
     SETTINGS = { ...SETTINGS, ...(message.settings || {}) };
+    syncGlobalModeClasses();
     refreshHighlightClasses();
     return;
   }
@@ -141,10 +209,65 @@ browser.runtime.onMessage.addListener((message) => {
     const on = !!message.on;
     document.documentElement.classList.toggle("est-reading-mode", on);
     document.body?.classList.toggle("est-reading-mode", on);
+
+    // Apply the current tuning whenever reading mode is toggled.
+    applyReadingModeTuning();
+
     sendStatus(on ? "Reading mode: ON" : "Reading mode: OFF");
     return;
   }
+
+  if (message.action === "UPDATE_READING_MODE_SETTINGS") {
+    SETTINGS = { ...SETTINGS, ...(message.settings || {}) };
+    applyReadingModeTuning();
+    return;
+  }
 });
+
+function applyReadingModeTuning() {
+  const html = document.documentElement;
+
+  // Chunking is controlled with data attribute (CSS handles show/hide)
+  const chunk = (SETTINGS.rm_chunk || "medium").toLowerCase();
+  html.dataset.estChunking = chunk;
+  document.body?.setAttribute("data-est-chunking", chunk);
+
+  // Line spacing
+  const lineMap = { small: 1.6, medium: 2.1, large: 2.5 };
+  const letterMap = { tight: "0em", medium: "0.02em", wide: "0.04em" };
+  const widthMap = { wide: "90ch", medium: "72ch", narrow: "60ch" };
+
+  // Chunk sizes (only matter when chunking isn't off)
+  const gapMap = {
+    small: { gap: "1.2em", wide: "2.4em" },
+    medium: { gap: "2em", wide: "4em" },
+    large: { gap: "3em", wide: "6em" },
+    off: { gap: "0em", wide: "0em" },
+  };
+
+  const line = lineMap[(SETTINGS.rm_line || "medium").toLowerCase()] ?? lineMap.medium;
+  const letter = letterMap[(SETTINGS.rm_letter || "medium").toLowerCase()] ?? letterMap.medium;
+  const width = widthMap[(SETTINGS.rm_width || "medium").toLowerCase()] ?? widthMap.medium;
+  const gaps = gapMap[chunk] ?? gapMap.medium;
+
+  html.style.setProperty("--est-rm-line-height", String(line));
+  html.style.setProperty("--est-rm-letter-spacing", String(letter));
+  html.style.setProperty("--est-rm-max-width", String(width));
+  html.style.setProperty("--est-rm-gap", String(gaps.gap));
+  html.style.setProperty("--est-rm-gap-wide", String(gaps.wide));
+}
+
+function syncGlobalModeClasses() {
+  // Show case numbers per-case when the case toggle is ON.
+  // (This is what makes "(2)" appear next to a word when Gen is enabled.)
+  const html = document.documentElement;
+  const cases = [
+    "nom","gen","par","ill","ine","ela","all","ade","abl","tra","ter","ess","abe","kom"
+  ];
+  for (const c of cases) {
+    html.classList.toggle(`est-case-num-${c}`, !!SETTINGS[c]);
+  }
+}
 
 function sendStatus(text, error = false) {
   browser.runtime.sendMessage({

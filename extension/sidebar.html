@@ -3,6 +3,8 @@
 <head>
   <meta charset="utf-8">
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;500;600&display=swap" rel="stylesheet">
+  <!-- Use the SAME CSS file as the page highlights so sidebar styling stays in sync -->
+  <link rel="stylesheet" href="styles.css">
   <style>
     body { font-family: 'Lexend', sans-serif; background: #f4f4f9; margin: 0; padding: 12px; color: #333; }
 
@@ -69,20 +71,25 @@
     .error { background: #fee !important; color: #d00 !important; }
 
 
-/* Legend styles (match page highlight cues, simplified) */
-.legend-verb { font-weight: 700; background: linear-gradient(transparent 18%, #D4EDDA 22%, #D4EDDA 82%, transparent 88%); padding: 0 4px; border-radius: 4px; }
-.legend-adv  { font-style: italic; background: linear-gradient(transparent 18%, #D4EDDA 22%, #D4EDDA 82%, transparent 88%); padding: 0 4px; border-radius: 4px; }
-.legend-noun { padding: 0 4px; border-bottom: 3px solid rgba(100,150,255,0.6); background: rgba(100,150,255,0.12); border-radius: 2px 2px 0 0; }
-.legend-adj  { font-style: italic; color: darkmagenta; background: linear-gradient(transparent 18%, #e7d0fe 22%, #e7d0fe 82%, transparent 88%); padding: 0 4px; border-radius: 4px; }
+    /* Collapsible cards */
+    details.card { padding: 0; }
+    details.card > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    details.card > summary::-webkit-details-marker { display: none; }
+    .summary-title { font-size: 11px; text-transform: uppercase; color: #888; letter-spacing: 0.5px; font-weight: 600; }
+    .card-body { padding: 12px; }
 
-.legend-case-gen { border-bottom: 2px solid #e68a22; padding-bottom: 1px; }
-.legend-case-par { border-bottom: 2px dashed #0b1e6f; padding-bottom: 1px; }
-.legend-case-ill { border-bottom: 2px solid #7a5cff; padding-bottom: 1px; }
-.legend-case-ine { border-bottom: 2px dotted #7a5cff; padding-bottom: 1px; }
-.legend-case-ela { border-bottom: 2px dashed #7a5cff; padding-bottom: 1px; }
-.legend-case-all { border-bottom: 2px solid #2aa198; padding-bottom: 1px; }
-.legend-case-ade { border-bottom: 2px dotted #2aa198; padding-bottom: 1px; }
-.legend-case-abl { border-bottom: 2px dashed #2aa198; padding-bottom: 1px; }
+    /* Make highlight samples look tidy inside the sidebar */
+    .legend-sample.esthl { padding: 0 4px; border-radius: 4px; }
+    .legend-sample.esthl.est-noun-base { border-radius: 2px 2px 0 0; }
+    .legend-sample.esthl.est-verb-base { padding: 0.05em 0.25em; }
 
     /* Dot Indicators */
     .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
@@ -132,134 +139,200 @@
   <div id="status-bar">Ready</div>
 
 
-<!-- Reading Mode -->
-<div class="card" id="card-reading">
-  <h3>Reading</h3>
+  <!-- READING MODE (collapsible) -->
+  <details class="card" id="card-reading" open>
+    <summary>
+      <span class="summary-title">READING MODE</span>
+      <label class="switch" onclick="event.stopPropagation()">
+        <input type="checkbox" id="chk-reading">
+        <span class="slider"></span>
+      </label>
+    </summary>
 
-  <div class="row">
-    <div class="label-group">
-      <span class="label-text">Reading Mode</span>
-    </div>
-    <label class="switch"><input type="checkbox" id="chk-reading"><span class="slider"></span></label>
-  </div>
-</div>
-
-  <!-- Key -->
-  <div class="card" id="card-action">
+    <div class="card-body">
+      <div class="row">
+        <div class="label-group">
+          <span class="label-text">Line spacing</span>
+        </div>
+        <select id="sel-line" style="font-size:12px; padding:4px 6px;">
+          <option value="small">Tight</option>
+          <option value="medium" selected>Comfort</option>
+          <option value="large">Spacious</option>
+        </select>
+      </div>
 
       <div class="row">
-      <div class="label-group">
-        <span class="dot d-noun"></span>
-        <span class="label-text legend-noun">Nouns</span>
-    
+        <div class="label-group">
+          <span class="label-text">Letter spacing</span>
+        </div>
+        <select id="sel-letter" style="font-size:12px; padding:4px 6px;">
+          <option value="tight">0</option>
+          <option value="medium" selected>Medium</option>
+          <option value="wide">Wide</option>
+        </select>
       </div>
+
+      <div class="row">
+        <div class="label-group">
+          <span class="label-text">Chunking</span>
+          <span class="label-hint-inline">sentence gaps</span>
+        </div>
+        <select id="sel-chunk" style="font-size:12px; padding:4px 6px;">
+          <option value="off">Off</option>
+          <option value="small">Light</option>
+          <option value="medium" selected>Medium</option>
+        </select>
+      </div>
+
+      <div class="row">
+        <div class="label-group">
+          <span class="label-text">Width</span>
+        </div>
+        <select id="sel-width" style="font-size:12px; padding:4px 6px;">
+          <option value="wide">Wide</option>
+          <option value="medium" selected>Medium</option>
+          <option value="narrow">Narrow</option>
+        </select>
+      </div>
+    </div>
+  </details>
+
+
+  <!-- SÕNALIIGID (collapsible) -->
+  <details class="card" id="card-pos" open>
+    <summary><span class="summary-title">SÕNALIIGID</span></summary>
+    <div class="card-body">
+      <div class="row">
+        <div class="label-group">
+          <span class="dot d-noun"></span>
+          <span class="label-text esthl legend-sample est-noun-base">Nimi･sõnad</span>
+        </div>
+        <label class="switch"><input type="checkbox" id="chk-noun" checked><span class="slider"></span></label>
+      </div>
+
+      <div class="row">
+        <div class="label-group">
+          <span class="dot d-adj"></span>
+          <span class="label-text esthl legend-sample est-adj-base">Omadus･sõnad</span>
+        </div>
+        <label class="switch"><input type="checkbox" id="chk-adj" checked><span class="slider"></span></label>
+      </div>
+
+      <div class="row">
+        <div class="label-group">
+          <span class="dot d-verb"></span>
+          <span class="label-text esthl legend-sample est-verb-base">Tegu･sõnad</span>
+        </div>
+        <label class="switch"><input type="checkbox" id="chk-verb" checked><span class="slider"></span></label>
+      </div>
+
+      <div class="row">
+        <div class="label-group">
+          <span class="dot d-adv"></span>
+          <span class="label-text esthl legend-sample est-adv-base">Määr･sõnad</span>
+        </div>
+        <label class="switch"><input type="checkbox" id="chk-adv" checked><span class="slider"></span></label>
+      </div>
+
+      <div class="row">
+        <div class="label-group">
+          <span class="label-text esthl legend-sample est-conj-base">Side･sõnad</span>
+          <span class="label-hint-inline">(light)</span>
+        </div>
+        <label class="switch"><input type="checkbox" id="chk-conj"><span class="slider"></span></label>
+      </div>
+
+      <div class="row">
+        <div class="label-group">
+          <span class="label-text esthl legend-sample est-pron-base">Asesõnad</span>
+          <span class="label-hint-inline">(light)</span>
+        </div>
+        <label class="switch"><input type="checkbox" id="chk-pron"><span class="slider"></span></label>
+      </div>
+
+      <div class="row">
+        <div class="label-group">
+          <span class="label-text esthl legend-sample est-adp-base">Kaassõnad</span>
+          <span class="label-hint-inline">(light)</span>
+        </div>
+        <label class="switch"><input type="checkbox" id="chk-adp"><span class="slider"></span></label>
+      </div>
+
+      <div class="row">
+        <div class="label-group">
+          <span class="label-text esthl legend-sample est-num-base">Arvsõnad</span>
+          <span class="label-hint-inline">(light)</span>
+        </div>
+        <label class="switch"><input type="checkbox" id="chk-num"><span class="slider"></span></label>
+      </div>
+    </div>
+  </details>
+
+
+  <!-- INFLUENCERS (collapsible) -->
+  <details class="card" id="card-influencers" open>
+    <summary><span class="summary-title">INFLUENCERS</span></summary>
+    <div class="card-body">
+      <div class="row">
+        <div class="label-group">
+          <span class="label-text esthl legend-sample est-negation">Negation</span>
+          <span class="label-hint-inline">ei / mitte / pole…</span>
+        </div>
+        <label class="switch"><input type="checkbox" id="chk-negation" checked><span class="slider"></span></label>
+      </div>
+    </div>
+  </details>
+
+
+  <!-- KAANDED (collapsible) -->
+  <details class="card" id="card-cases" open>
+    <summary><span class="summary-title">KAANDED</span></summary>
+    <div class="card-body">
+
+  <div class="case-item">
+    <div class="row">
+      <div class="label-group">
+        <span class="label-text">(1) Nime・tav</span>
+        <span class="label-hint-inline">(nominative)</span>
+
+      </div>
+
       <label class="switch">
-        <input type="checkbox" id="chk-noun" checked>
+        <input type="checkbox" id="chk-nom" checked>
         <span class="slider"></span>
       </label>
     </div>
-
-    <div class="row">
-      <div class="label-group">
-        <span class="dot d-verb"></span>
-        <span class="label-text legend-verb">Verbs</span>
-      </div>
-      <label class="switch"><input type="checkbox" id="chk-verb" checked><span class="slider"></span></label>
-    </div>
-
-    <div class="row">
-      <div class="label-group">
-        <span class="dot d-adv"></span>
-        <span class="label-text legend-adv">Adverbs</span>
-      </div>
-      <label class="switch"><input type="checkbox" id="chk-adv" checked><span class="slider"></span></label>
-    </div>
   </div>
 
-    <div class="row">
-      <div class="label-group">
-        <span class="dot d-adj"></span>
-        <span class="label-text legend-adj">Adjectives</span>
-        <span class="label-hint-inline">extra flavour</span>
-      </div>
-      <label class="switch"><input type="checkbox" id="chk-adj" checked><span class="slider"></span></label>
-    </div>
-  </div>
 
-  <!-- POS: Extra -->
-   <!--
-  <div class="card" id="card-pos-extra">
-    <h3>Extra POS</h3>
-
-    <div class="row">
-      <div class="label-group">
-        <span class="label-text">Pronouns</span>
-        <span class="label-hint-inline">ghosts of nouns</span>
-      </div>
-      <label class="switch"><input type="checkbox" id="chk-pron"><span class="slider"></span></label>
-    </div>
-
-    <div class="row">
-      <div class="label-group">
-        <span class="label-text">Adpositions</span>
-        <span class="label-hint-inline">spatial vibes</span>
-      </div>
-      <label class="switch"><input type="checkbox" id="chk-adp"><span class="slider"></span></label>
-    </div>
-
-    <div class="row">
-      <div class="label-group">
-        <span class="label-text">Conjunctions</span>
-        <span class="label-hint-inline">connect</span>
-      </div>
-      <label class="switch"><input type="checkbox" id="chk-conj"><span class="slider"></span></label>
-    </div>
--->
-    <!-- If you later enable numerals in sidebar.js + content.js -->
-    <!--
-    <div class="row">
-      <div class="label-group">
-        <span class="label-text">Numerals</span>
-        <span class="label-hint-inline">count</span>
-      </div>
-      <label class="switch"><input type="checkbox" id="chk-num"><span class="slider"></span></label>
-    </div>
-    -->
-  </div>
-
-  <!-- CASES -->
-  <div class="card" id="card-cases">
-    <h3>Cases </h3>
-    
-    <div class="row"><div class="label-group"><span class="label-text">(1) Nime・tav </span></div>
-      <label class="switch"><input type="checkbox" id="chk-nom" checked><span class="slider"></span></label>
-    </div>
-    <div class="row"><div class="label-group"><span class="label-text legend-case-gen">(2) Omas・tav</span></div>
+    <div class="row"><div class="label-group"><span class="label-text esthl legend-sample est-case-gen">(2) Omas・tav</span></div>
       <label class="switch"><input type="checkbox" id="chk-gen"><span class="slider"></span></label>
     </div>
-    <div class="row"><div class="label-group"><span class="label-text legend-case-par">(3) Osas・tav</span></div>
+    <div class="row"><div class="label-group"><span class="label-text esthl legend-sample est-case-par">(3) Osas・tav</span></div>
       <label class="switch"><input type="checkbox" id="chk-par"><span class="slider"></span></label>
     </div>
 
-    <div class="case-group-title">III Kuhu? Kus? Kust? ></Ruum-Sees></div>
-    <div class="row"><div class="label-group"><span class="label-text legend-case-ill">(4) Sisse・ütlev</span></div>
+
+    <div class="case-group-title"> Kuhu? Kus? Kust? ></Ruum-Sees></div>
+    <div class="row"><div class="label-group"><span class="label-text esthl legend-sample est-case-ill">(4) Sisse・ütlev</span></div>
       <label class="switch"><input type="checkbox" id="chk-ill"><span class="slider"></span></label>
     </div>
-    <div class="row"><div class="label-group"><span class="label-text legend-case-ine">(5) Sees・ütlev</span></div>
+    <div class="row"><div class="label-group"><span class="label-text esthl legend-sample est-case-ine">(5) Sees・ütlev</span></div>
       <label class="switch"><input type="checkbox" id="chk-ine"><span class="slider"></span></label>
     </div>
-    <div class="row"><div class="label-group"><span class="label-text legend-case-ela"> (6)Seest・ütlev</span></div>
+    <div class="row"><div class="label-group"><span class="label-text esthl legend-sample est-case-ela">(6) Seest・ütlev</span></div>
       <label class="switch"><input type="checkbox" id="chk-ela"><span class="slider"></span></label>
     </div>
 
+
     <div class="case-group-title">To / on / from (surface)</div>
-    <div class="row"><div class="label-group"><span class="label-text legend-case-all"> (7) Alale・ütlev</span></div>
+    <div class="row"><div class="label-group"><span class="label-text esthl legend-sample est-case-all">(7) Alale・ütlev</span></div>
       <label class="switch"><input type="checkbox" id="chk-all"><span class="slider"></span></label>
     </div>
-    <div class="row"><div class="label-group"><span class="label-text legend-case-ade">(8) Alal・ütlev </span></div>
+    <div class="row"><div class="label-group"><span class="label-text esthl legend-sample est-case-ade">(8) Alal・ütlev</span></div>
       <label class="switch"><input type="checkbox" id="chk-ade"><span class="slider"></span></label>
     </div>
-    <div class="row"><div class="label-group"><span class="label-text legend-case-abl">(9) Alalt・ütlev </span></div>
+    <div class="row"><div class="label-group"><span class="label-text esthl legend-sample est-case-abl">(9) Alalt・ütlev</span></div>
       <label class="switch"><input type="checkbox" id="chk-abl"><span class="slider"></span></label>
     </div>
 
@@ -281,7 +354,8 @@
     <div class="row"><div class="label-group"><span class="label-text">(14) Kaasa・ütlev </span></div>
       <label class="switch"><input type="checkbox" id="chk-kom"><span class="slider"></span></label>
     </div>
-  </div>
+    </div>
+  </details>
 
   <!-- Optional: Forms -->
   <!--

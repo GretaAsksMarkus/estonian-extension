@@ -7,6 +7,12 @@ const UI = {
   master: "chk-master",
   reading: "chk-reading",
 
+  // Reading Mode controls
+  rm_line: "sel-line",
+  rm_letter: "sel-letter",
+  rm_chunk: "sel-chunk",
+  rm_width: "sel-width",
+
   // POS
   noun: "chk-noun",
   verb: "chk-verb",
@@ -16,6 +22,9 @@ const UI = {
   adp: "chk-adp",
   conj: "chk-conj",
   num: "chk-num",
+
+  // Influencers
+  negation: "chk-negation",
 
   // CASES (14)
   nom: "chk-nom",
@@ -45,6 +54,12 @@ const UI = {
 // Calm defaults
 const DEFAULT_SETTINGS = {
   reading: false,
+
+  // Reading Mode tuning
+  rm_line: "medium",
+  rm_letter: "medium",
+  rm_chunk: "medium",
+  rm_width: "medium",
   noun: true,
   verb: true,
   adj: true,
@@ -102,6 +117,19 @@ function getCheckbox(id) {
   return null;
 }
 
+function setSelect(id, value) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (el.tagName === "SELECT") el.value = String(value);
+}
+
+function getSelect(id) {
+  const el = document.getElementById(id);
+  if (!el) return null;
+  if (el.tagName === "SELECT") return String(el.value || "");
+  return null;
+}
+
 async function getActiveTabId() {
   const tabs = await browser.tabs.query({ active: true, currentWindow: true });
   return tabs?.[0]?.id ?? null;
@@ -122,9 +150,17 @@ function applySettingsToUI() {
   setCheckbox(UI.master, isMasterOn);
   if (UI.reading) setCheckbox(UI.reading, settings.reading);
 
+  // Reading mode tuning
+  setSelect(UI.rm_line, settings.rm_line);
+  setSelect(UI.rm_letter, settings.rm_letter);
+  setSelect(UI.rm_chunk, settings.rm_chunk);
+  setSelect(UI.rm_width, settings.rm_width);
+
   for (const k of ["noun","verb","adj","adv","pron","adp","conj","num"]) {
     if (UI[k]) setCheckbox(UI[k], settings[k]);
   }
+
+  if (UI.negation) setCheckbox(UI.negation, settings.negation);
 
   for (const c of ["nom","gen","par","ill","ine","ela","all","ade","abl","tra","ter","ess","abe","kom"]) {
     if (UI[c]) setCheckbox(UI[c], settings[c]);
@@ -133,16 +169,30 @@ function applySettingsToUI() {
   for (const k of ["number","v_ma","v_da","v_part"]) {
     if (UI[k]) setCheckbox(UI[k], settings[k]);
   }
+
 }
 
 function readUIIntoSettings() {
   const r = getCheckbox(UI.reading);
   if (r !== null) settings.reading = r;
 
+  // Reading Mode tuning
+  const rm_line = getSelect(UI.rm_line);
+  const rm_letter = getSelect(UI.rm_letter);
+  const rm_chunk = getSelect(UI.rm_chunk);
+  const rm_width = getSelect(UI.rm_width);
+  if (rm_line) settings.rm_line = rm_line;
+  if (rm_letter) settings.rm_letter = rm_letter;
+  if (rm_chunk) settings.rm_chunk = rm_chunk;
+  if (rm_width) settings.rm_width = rm_width;
+
   for (const k of ["noun","verb","adj","adv","pron","adp","conj","num"]) {
     const v = getCheckbox(UI[k]);
     if (v !== null) settings[k] = v;
   }
+
+  const neg = getCheckbox(UI.negation);
+  if (neg !== null) settings.negation = neg;
 
   for (const c of ["nom","gen","par","ill","ine","ela","all","ade","abl","tra","ter","ess","abe","kom"]) {
     const v = getCheckbox(UI[c]);
@@ -153,10 +203,17 @@ function readUIIntoSettings() {
     const v = getCheckbox(UI[k]);
     if (v !== null) settings[k] = v;
   }
+
 }
 
 function buildContentSettingsPayload() {
   return {
+    // Reading Mode tuning (so content.js can apply CSS vars)
+    rm_line: settings.rm_line,
+    rm_letter: settings.rm_letter,
+    rm_chunk: settings.rm_chunk,
+    rm_width: settings.rm_width,
+
     // POS
     noun: settings.noun,
     verb: settings.verb,
@@ -203,6 +260,15 @@ async function onMasterChanged(checked) {
 
     // ensure reading mode state matches sidebar
     await sendToActiveTab({ action: "TOGGLE_READING_MODE", on: settings.reading });
+    await sendToActiveTab({
+      action: "UPDATE_READING_MODE_SETTINGS",
+      settings: {
+        rm_line: settings.rm_line,
+        rm_letter: settings.rm_letter,
+        rm_chunk: settings.rm_chunk,
+        rm_width: settings.rm_width,
+      },
+    });
 
     await sendToActiveTab({
       action: "ANALYZE_PAGE",
@@ -217,6 +283,17 @@ async function onMasterChanged(checked) {
 
 async function onAnySettingChanged() {
   readUIIntoSettings();
+
+  // Reading mode tuning applies immediately (even if analysis is OFF)
+  await sendToActiveTab({
+    action: "UPDATE_READING_MODE_SETTINGS",
+    settings: {
+      rm_line: settings.rm_line,
+      rm_letter: settings.rm_letter,
+      rm_chunk: settings.rm_chunk,
+      rm_width: settings.rm_width,
+    },
+  });
 
   // Reading mode applies immediately, even if analysis is OFF
   await sendToActiveTab({ action: "TOGGLE_READING_MODE", on: settings.reading });
@@ -255,6 +332,18 @@ function bindCheckbox(id) {
   el.addEventListener("change", onAnySettingChanged);
 }
 
+function bindSelect(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener("change", onAnySettingChanged);
+}
+
+function bindSelect(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener("change", onAnySettingChanged);
+}
+
 (function init() {
   applySettingsToUI();
   updateStatus("Ready");
@@ -267,6 +356,12 @@ function bindCheckbox(id) {
 
   // bind all toggles
   bindCheckbox(UI.reading);
+  bindSelect(UI.rm_line);
+  bindSelect(UI.rm_letter);
+  bindSelect(UI.rm_chunk);
+  bindSelect(UI.rm_width);
+  // influencers
+  bindCheckbox(UI.negation);
   for (const k of ["noun","verb","adj","adv","pron","adp","conj","num"]) bindCheckbox(UI[k]);
   for (const c of ["nom","gen","par","ill","ine","ela","all","ade","abl","tra","ter","ess","abe","kom"]) bindCheckbox(UI[c]);
   for (const k of ["number","v_ma","v_da","v_part"]) bindCheckbox(UI[k]);

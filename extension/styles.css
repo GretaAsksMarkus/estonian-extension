@@ -4,6 +4,39 @@
    Scope: nouns, verbs, adjectives, adverbs, negation, + 14 cases
    ========================================================= */
 
+/* =========================================================
+   Shared design tokens (used by BOTH page highlights and sidebar legend)
+   If you tweak these values, both the page + sidebar update together.
+   ========================================================= */
+
+:root {
+  /* Core POS palette */
+  --est-noun-bg: rgba(100,150,255,0.12);
+  --est-noun-underline: rgba(100,150,255,0.6);
+
+  --est-verb-bg: rgba(50, 118, 16, 0.05);
+  --est-verb-underline: rgba(50, 118, 16, 0.734);
+
+  --est-adj-bg: #e7d0fe;
+  --est-adj-color: darkmagenta;
+
+  --est-adv-bg: #D4EDDA;
+  --est-adv-color: rgb(0, 63, 0);
+
+  /* Case palette */
+  --est-case-gen: #e68a22;
+  --est-case-par: #0b1e6f;
+  --est-case-internal: #7a5cff;
+  --est-case-external: #2aa198;
+
+  /* Reading Mode knobs (driven by sidebar) */
+  --est-rm-line-height: 2.2;
+  --est-rm-letter-spacing: 0.02em;
+  --est-rm-max-width: 72ch;
+  --est-rm-gap: 2em;
+  --est-rm-gap-wide: 4em;
+}
+
 
 /* Base wrapper for every highlighted token */
 /* Base wrapper for every token span (even unstyled ones) */
@@ -24,28 +57,37 @@
 
 /* Nouns (anchors) */
 .esthl.est-noun-base {
-  padding: 0.1em 0.35em;
-  background-color: rgba(100,150,255,0.12);
-  border-bottom: 3px solid rgba(100,150,255,0.6);
+  background-color: var(--est-noun-bg);
+  border-radius: 1px 1px 0 0;
+
+  border-bottom: 3px solid var(--est-noun-underline);
   border-radius: 1px 1px 0 0;
 } 
 
-/* Verbs */
+/* Verbs — double underline (clean & wrap-safe) */
 .esthl.est-verb-base {
   padding: 0.1em 0.35em;
-  background-color: rgba(131, 255, 100, 0.12);
-  border-bottom: 3px solid rgba(100, 255, 136, 0.6);
-  border-radius: 1px 1px 0 0;
+
+    /* soft highlight */
+    background-color: var(--est-verb-bg);
+    border-radius: 1px 1px 0 0;
+
+    /* REAL double underline */
+    text-decoration-line: underline;
+    text-decoration-style: double;
+    text-decoration-color: var(--est-verb-underline);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.25em;
 } 
 
 /* Adjectives */
 .esthl.est-adj-base {
-  color: darkmagenta;
+  color: var(--est-adj-color);
   font-style: italic;
   background: linear-gradient(
     transparent 18%,
-    #e7d0fe 22%,
-    #e7d0fe 82%,
+    var(--est-adj-bg) 22%,
+    var(--est-adj-bg) 82%,
     transparent 88%
   );
 }
@@ -53,11 +95,11 @@
 /* Adverbs — stable marker */
 .esthl.est-adv-base {
   font-style: italic;
-  color: rgb(0, 63, 0);
+  color: var(--est-adv-color);
   background: linear-gradient(
     transparent 18%,
-    #D4EDDA 22%,
-    #D4EDDA 82%,
+    var(--est-adv-bg) 22%,
+    var(--est-adv-bg) 82%,
     transparent 88%
   );
 }
@@ -172,45 +214,45 @@
 
 /* 2 Omastav (genitiiv) */
 .esthl.est-case-gen {
-  border-bottom: 0.18em solid #e68a22;
+  border-bottom: 0.18em solid var(--est-case-gen);
   padding-bottom: 0.05em;
 }
 
 /* 3 Osastav */
 .esthl.est-case-par {
-  border-bottom: 0.18em dashed #0b1e6f;
+  border-bottom: 0.18em dashed var(--est-case-par);
   padding-bottom: 0.05em;
 }
 
 /* 4 Internal local: into / in / out */
 .esthl.est-case-ill {
-  border-bottom: 0.18em solid #7a5cff;
+  border-bottom: 0.18em solid var(--est-case-internal);
   padding-bottom: 0.05em;
 }
 
 .esthl.est-case-ine {
-  border-bottom: 0.18em dotted #7a5cff;
+  border-bottom: 0.18em dotted var(--est-case-internal);
   padding-bottom: 0.05em;
 }
 
 .esthl.est-case-ela {
-  border-bottom: 0.18em dashed #7a5cff;
+  border-bottom: 0.18em dashed var(--est-case-internal);
   padding-bottom: 0.05em;
 }
 
 /* External local: to / on / from */
 .esthl.est-case-all {
-  border-bottom: 0.18em solid #2aa198;
+  border-bottom: 0.18em solid var(--est-case-external);
   padding-bottom: 0.05em;
 }
 
 .esthl.est-case-ade {
-  border-bottom: 0.18em dotted #2aa198;
+  border-bottom: 0.18em dotted var(--est-case-external);
   padding-bottom: 0.05em;
 }
 
 .esthl.est-case-abl {
-  border-bottom: 0.18em dashed #2aa198;
+  border-bottom: 0.18em dashed var(--est-case-external);
   padding-bottom: 0.05em;
 }
 
@@ -298,31 +340,80 @@
    Reading Mode (toggle via content script)
    ========================================================= */
 
-/* Reading Mode: sentence chunk gaps */
+/* Sentence chunk gaps exist in DOM but are OFF unless Reading Mode is ON */
+.est-sentence-gap { display:none; height: var(--est-rm-gap); }
+.est-sentence-gap.wide { display:none; height: var(--est-rm-gap-wide); }
+
 html.est-reading-mode .est-sentence-gap,
-body.est-reading-mode .est-sentence-gap { 
-  display:block; 
-  height: 2em; }
-html.est-reading-mode .est-sentence-gap.wide,
-body.est-reading-mode .est-sentence-gap.wide { display:block; height: 4em; }
+body.est-reading-mode .est-sentence-gap {
+  display:block;
+}
 
+/* If sidebar sets chunking="off", hide gaps even in reading mode */
+html.est-reading-mode[data-est-chunking="off"] .est-sentence-gap,
+body.est-reading-mode[data-est-chunking="off"] .est-sentence-gap {
+  display: none;
+}
 
-/* 12.01 - SENTENCES & CHUNKING (controlled by Reading Mode) */
-.est-sentence-gap { display:none; height: 2em; }
-.est-sentence-gap.wide { display:none; height: 4em; }
-
-
-html.est-reading-mode, body.est-reading-mode {
-  line-height: 1.8 !important;
-  letter-spacing: 0.02em !important;
+html.est-reading-mode,
+body.est-reading-mode {
+  line-height: var(--est-rm-line-height) !important;
+  letter-spacing: var(--est-rm-letter-spacing) !important;
 }
 
 body.est-reading-mode p,
 body.est-reading-mode li {
-  max-width: 72ch !important;
+  max-width: var(--est-rm-max-width) !important;
 }
 
 /* Optional: soften non-highlighted text a bit */
 body.est-reading-mode {
   -webkit-font-smoothing: antialiased;
 }
+
+/* =========================================================
+   Case numbers next to words (per-case toggle)
+   - content.js toggles html/body classes: est-case-num-<case>
+   ========================================================= */
+
+html.est-case-num-nom .esthl.est-case-nom::after { content: "(1)"; }
+html.est-case-num-gen .esthl.est-case-gen::after { content: "(2)"; }
+html.est-case-num-par .esthl.est-case-par::after { content: "(3)"; }
+html.est-case-num-ill .esthl.est-case-ill::after { content: "(4)"; }
+html.est-case-num-ine .esthl.est-case-ine::after { content: "(5)"; }
+html.est-case-num-ela .esthl.est-case-ela::after { content: "(6)"; }
+html.est-case-num-all .esthl.est-case-all::after { content: "(7)"; }
+html.est-case-num-ade .esthl.est-case-ade::after { content: "(8)"; }
+html.est-case-num-abl .esthl.est-case-abl::after { content: "(9)"; }
+html.est-case-num-tra .esthl.est-case-tra::after { content: "(10)"; }
+html.est-case-num-ter .esthl.est-case-ter::after { content: "(11)"; }
+html.est-case-num-ess .esthl.est-case-ess::after { content: "(12)"; }
+html.est-case-num-abe .esthl.est-case-abe::after { content: "(13)"; }
+html.est-case-num-kom .esthl.est-case-kom::after { content: "(14)"; }
+
+html[class*="est-case-num-"] .esthl[class*="est-case-"]::after {
+  font-size: 0.72em;
+  opacity: 0.65;
+  margin-left: 0.18em;
+  letter-spacing: 0;
+}
+
+
+/* Case Explainer */
+.case-item .label-group{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* not centered */
+  gap: 2px;
+}
+
+/* Quiet explainer */
+.case-explainer{
+  font-size: 11px;
+  line-height: 1.35;
+  color: #9a9a9a;
+  margin-left: 1.35rem;   /* aligns under after (1) */
+  max-width: 30ch;
+}
+
+

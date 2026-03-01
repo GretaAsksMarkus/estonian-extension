@@ -25,7 +25,8 @@
 
   /* Case palette */
   --est-case-gen: #e68a22;
-  --est-case-par: #0b1e6f;
+  --est-case-gen-bg: #FFE3D4
+  --est-case-par: #0015FF;
   --est-case-internal: #7a5cff;
   --est-case-external: #2aa198;
 
@@ -82,26 +83,21 @@
 
 /* Adjectives */
 .esthl.est-adj-base {
-  color: var(--est-adj-color);
+  /* background-color: var(--est-noun-bg);*/
+  border-radius: 1px 1px 0 0;
+
+  border: 1px solid var(--est-adj-color);
+  border-radius: 1px 1px 0 0;
+
   font-style: italic;
-  background: linear-gradient(
-    transparent 18%,
-    var(--est-adj-bg) 22%,
-    var(--est-adj-bg) 82%,
-    transparent 88%
-  );
+  border-radius: 1px 1px 0 0;
 }
 
 /* Adverbs — stable marker */
 .esthl.est-adv-base {
   font-style: italic;
-  color: var(--est-adv-color);
-  background: linear-gradient(
-    transparent 18%,
-    var(--est-adv-bg) 22%,
-    var(--est-adv-bg) 82%,
-    transparent 88%
-  );
+  background-color: var(--est-adv-bg);
+  border-radius: 1px 1px 0 0;
 }
 
 /* -------------------------
@@ -132,7 +128,7 @@
 .esthl.est-conj-base {
   background: linear-gradient(
     transparent 18%,
-    #43474c 22%,
+    #ffeeee 22%,
     #43474c 82%,
     transparent 88%
   );
@@ -214,13 +210,15 @@
 
 /* 2 Omastav (genitiiv) */
 .esthl.est-case-gen {
-  border-bottom: 0.18em solid var(--est-case-gen);
-  padding-bottom: 0.05em;
+  background-color: var(--est-case-gen-bg);
+  border-radius: 1px 1px 0 0;
+  border: 1px solid var(--est-case-gen);
+  border-radius: 1px 1px 0 0;
 }
 
 /* 3 Osastav */
 .esthl.est-case-par {
-  border-bottom: 0.18em dashed var(--est-case-par);
+  border: 0.18em dashed var(--est-case-par);
   padding-bottom: 0.05em;
 }
 

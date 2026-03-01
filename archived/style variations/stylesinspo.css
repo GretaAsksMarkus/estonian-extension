@@ -1,0 +1,429 @@
+/* ========================================
+   CORE ANNOTATION SYSTEM - 5 STYLES
+   Accessibility-first, high clarity by default
+   ======================================== */
+
+/* Color palette */
+:root {
+  --highlight-blue: #4a7aad;
+  --highlight-blue-bg: rgba(74, 122, 173, 0.12);
+  --highlight-beige: #b8985c;
+  --highlight-beige-bg: rgba(184, 152, 92, 0.12);
+  --highlight-green: #6b9978;
+  --highlight-green-bg: rgba(107, 153, 120, 0.12);
+  --highlight-grey: #6a7581;
+  --highlight-grey-bg: rgba(106, 117, 129, 0.12);
+}
+
+/* Grayscale mode */
+.grayscale-mode {
+  filter: grayscale(1);
+}
+
+/* ========================================
+   1. SECTION BRACKETS
+   Hierarchy: PRIMARY – Strongest
+   Purpose: Multi-word units, phrases, structural grouping
+   Differentiator: 3px top/bottom bars + vertical end caps
+   ======================================== */
+
+.highlight-section {
+  position: relative;
+  display: inline-block;
+  padding: 0.3em 0.6em;
+  margin: 0 0.1em;
+}
+
+/* Top and bottom bars */
+.highlight-section::before,
+.highlight-section::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+}
+
+.highlight-section::before {
+  top: 0;
+}
+
+.highlight-section::after {
+  bottom: 0;
+}
+
+/* Vertical end caps via box-shadow */
+.highlight-section.variant-blue {
+  box-shadow: inset 3px 0 0 0 var(--highlight-blue), inset -3px 0 0 0 var(--highlight-blue);
+}
+
+.highlight-section.variant-blue::before,
+.highlight-section.variant-blue::after {
+  background: var(--highlight-blue);
+}
+
+.highlight-section.variant-beige {
+  box-shadow: inset 3px 0 0 0 var(--highlight-beige), inset -3px 0 0 0 var(--highlight-beige);
+}
+
+.highlight-section.variant-beige::before,
+.highlight-section.variant-beige::after {
+  background: var(--highlight-beige);
+}
+
+.highlight-section.variant-green {
+  box-shadow: inset 3px 0 0 0 var(--highlight-green), inset -3px 0 0 0 var(--highlight-green);
+}
+
+.highlight-section.variant-green::before,
+.highlight-section.variant-green::after {
+  background: var(--highlight-green);
+}
+
+.highlight-section.variant-grey {
+  box-shadow: inset 3px 0 0 0 var(--highlight-grey), inset -3px 0 0 0 var(--highlight-grey);
+}
+
+.highlight-section.variant-grey::before,
+.highlight-section.variant-grey::after {
+  background: var(--highlight-grey);
+}
+
+/* Reduced mode (lighter) */
+.reduced-mode .highlight-section {
+  padding: 0.2em 0.5em;
+}
+
+.reduced-mode .highlight-section::before,
+.reduced-mode .highlight-section::after {
+  height: 2px;
+}
+
+.reduced-mode .highlight-section.variant-blue {
+  box-shadow: inset 2px 0 0 0 var(--highlight-blue), inset -2px 0 0 0 var(--highlight-blue);
+}
+
+.reduced-mode .highlight-section.variant-beige {
+  box-shadow: inset 2px 0 0 0 var(--highlight-beige), inset -2px 0 0 0 var(--highlight-beige);
+}
+
+.reduced-mode .highlight-section.variant-green {
+  box-shadow: inset 2px 0 0 0 var(--highlight-green), inset -2px 0 0 0 var(--highlight-green);
+}
+
+.reduced-mode .highlight-section.variant-grey {
+  box-shadow: inset 2px 0 0 0 var(--highlight-grey), inset -2px 0 0 0 var(--highlight-grey);
+}
+
+/* ========================================
+   2. THICK UNDERLINE
+   Hierarchy: PRIMARY – Strong
+   Purpose: Main verbs, subjects, primary grammatical functions
+   Differentiator: 3px solid underline
+   ======================================== */
+
+.highlight-thick {
+  position: relative;
+  display: inline-block;
+  border-bottom: 3px solid;
+  padding-bottom: 0.15em;
+}
+
+.highlight-thick.variant-blue {
+  border-bottom-color: var(--highlight-blue);
+}
+
+.highlight-thick.variant-beige {
+  border-bottom-color: var(--highlight-beige);
+}
+
+.highlight-thick.variant-green {
+  border-bottom-color: var(--highlight-green);
+}
+
+.highlight-thick.variant-grey {
+  border-bottom-color: var(--highlight-grey);
+}
+
+/* Reduced mode */
+.reduced-mode .highlight-thick {
+  border-bottom-width: 2px;
+}
+
+/* ========================================
+   3. DOTTED UNDERLINE
+   Hierarchy: SECONDARY – Medium
+   Purpose: Cases, secondary grammatical markers
+   Differentiator: Large dot pattern (3px dots, 4px spacing)
+   ======================================== */
+
+.highlight-dotted {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.3em;
+}
+
+.highlight-dotted::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  background-size: 8px 4px;
+  background-repeat: repeat-x;
+  background-position: left bottom;
+}
+
+.highlight-dotted.variant-blue::after {
+  background-image: radial-gradient(circle, var(--highlight-blue) 1.5px, transparent 1.5px);
+}
+
+.highlight-dotted.variant-beige::after {
+  background-image: radial-gradient(circle, var(--highlight-beige) 1.5px, transparent 1.5px);
+}
+
+.highlight-dotted.variant-green::after {
+  background-image: radial-gradient(circle, var(--highlight-green) 1.5px, transparent 1.5px);
+}
+
+.highlight-dotted.variant-grey::after {
+  background-image: radial-gradient(circle, var(--highlight-grey) 1.5px, transparent 1.5px);
+}
+
+/* Reduced mode */
+.reduced-mode .highlight-dotted::after {
+  height: 3px;
+}
+
+.reduced-mode .highlight-dotted.variant-blue::after {
+  background-image: radial-gradient(circle, var(--highlight-blue) 1px, transparent 1px);
+}
+
+.reduced-mode .highlight-dotted.variant-beige::after {
+  background-image: radial-gradient(circle, var(--highlight-beige) 1px, transparent 1px);
+}
+
+.reduced-mode .highlight-dotted.variant-green::after {
+  background-image: radial-gradient(circle, var(--highlight-green) 1px, transparent 1px);
+}
+
+.reduced-mode .highlight-dotted.variant-grey::after {
+  background-image: radial-gradient(circle, var(--highlight-grey) 1px, transparent 1px);
+}
+
+/* ========================================
+   4. DOUBLE UNDERLINE
+   Hierarchy: LAYERED – Composite
+   Purpose: Words with multiple grammatical annotations
+   Differentiator: Two distinct lines (3px + 2px) with spacing
+   ======================================== */
+
+.highlight-double {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.4em;
+}
+
+.highlight-double::before,
+.highlight-double::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+
+.highlight-double::before {
+  bottom: 0.2em;
+  height: 3px;
+}
+
+.highlight-double::after {
+  bottom: 0.05em;
+  height: 2px;
+}
+
+/* Single color variants (same color, different weights) */
+.highlight-double.variant-blue::before {
+  background: var(--highlight-blue);
+}
+
+.highlight-double.variant-blue::after {
+  background: rgba(74, 122, 173, 0.6);
+}
+
+.highlight-double.variant-beige::before {
+  background: var(--highlight-beige);
+}
+
+.highlight-double.variant-beige::after {
+  background: rgba(184, 152, 92, 0.6);
+}
+
+.highlight-double.variant-green::before {
+  background: var(--highlight-green);
+}
+
+.highlight-double.variant-green::after {
+  background: rgba(107, 153, 120, 0.6);
+}
+
+.highlight-double.variant-grey::before {
+  background: var(--highlight-grey);
+}
+
+.highlight-double.variant-grey::after {
+  background: rgba(106, 117, 129, 0.6);
+}
+
+/* Two-color variants (for stacking different grammatical features) */
+.highlight-double.variant-blue-green::before {
+  background: var(--highlight-blue);
+}
+
+.highlight-double.variant-blue-green::after {
+  background: var(--highlight-green);
+}
+
+.highlight-double.variant-blue-grey::before {
+  background: var(--highlight-blue);
+}
+
+.highlight-double.variant-blue-grey::after {
+  background: var(--highlight-grey);
+}
+
+.highlight-double.variant-beige-grey::before {
+  background: var(--highlight-beige);
+}
+
+.highlight-double.variant-beige-grey::after {
+  background: var(--highlight-grey);
+}
+
+.highlight-double.variant-green-grey::before {
+  background: var(--highlight-green);
+}
+
+.highlight-double.variant-green-grey::after {
+  background: var(--highlight-grey);
+}
+
+/* Reduced mode */
+.reduced-mode .highlight-double::before {
+  height: 2px;
+}
+
+.reduced-mode .highlight-double::after {
+  height: 1px;
+}
+
+/* ========================================
+   5. BOX LABEL
+   Hierarchy: SEMANTIC – Contained
+   Purpose: Vocabulary, definitions, focus words
+   Differentiator: Full border (2px) + background fill
+   ======================================== */
+
+.highlight-box {
+  position: relative;
+  display: inline-block;
+  padding: 0.2em 0.45em;
+  border: 2px solid;
+  border-radius: 3px;
+}
+
+.highlight-box.variant-blue {
+  border-color: var(--highlight-blue);
+  background: var(--highlight-blue-bg);
+}
+
+.highlight-box.variant-beige {
+  border-color: var(--highlight-beige);
+  background: var(--highlight-beige-bg);
+}
+
+.highlight-box.variant-green {
+  border-color: var(--highlight-green);
+  background: var(--highlight-green-bg);
+}
+
+.highlight-box.variant-grey {
+  border-color: var(--highlight-grey);
+  background: var(--highlight-grey-bg);
+}
+
+/* Reduced mode */
+.reduced-mode .highlight-box {
+  border-width: 1px;
+  padding: 0.15em 0.35em;
+}
+
+.reduced-mode .highlight-box.variant-blue {
+  background: rgba(74, 122, 173, 0.08);
+}
+
+.reduced-mode .highlight-box.variant-beige {
+  background: rgba(184, 152, 92, 0.08);
+}
+
+.reduced-mode .highlight-box.variant-green {
+  background: rgba(107, 153, 120, 0.08);
+}
+
+.reduced-mode .highlight-box.variant-grey {
+  background: rgba(106, 117, 129, 0.08);
+}
+
+/* ========================================
+   INTERACTION STATES
+   ======================================== */
+
+.highlight-section:hover,
+.highlight-thick:hover,
+.highlight-dotted:hover,
+.highlight-double:hover,
+.highlight-box:hover {
+  cursor: help;
+}
+
+/* Focus states for accessibility */
+.highlight-section:focus-visible,
+.highlight-thick:focus-visible,
+.highlight-dotted:focus-visible,
+.highlight-double:focus-visible,
+.highlight-box:focus-visible {
+  outline: 2px solid var(--blueprint-blue);
+  outline-offset: 2px;
+}
+
+/* ========================================
+   RESPONSIVE ADJUSTMENTS
+   ======================================== */
+
+@media (max-width: 640px) {
+  /* Slightly reduce padding on mobile for tighter text flow */
+  .highlight-section {
+    padding: 0.25em 0.5em;
+  }
+
+  .highlight-box {
+    padding: 0.15em 0.35em;
+  }
+}
+
+/* ========================================
+   PRINT STYLES
+   ======================================== */
+
+@media print {
+  /* Ensure highlights are visible when printed */
+  .highlight-section,
+  .highlight-thick,
+  .highlight-dotted,
+  .highlight-double,
+  .highlight-box {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}
